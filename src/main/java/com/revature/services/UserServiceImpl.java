@@ -20,18 +20,17 @@ public class UserServiceImpl implements UserService{
 		this.udao = dao;
 	}
 
-	@Override
-	public User login(String username, String password) {
-		System.out.println("In service layer. Logging in user with creds: " + username + ", " + password);
-		// java.util
-		Optional<User> users = udao.selectAll() // when I call stream()
-				.stream()
-				.filter(u -> (u.getEmail().equals(username) && u.getPwd().equals(password)))
-				.findFirst(); // FindAny() is another option
-		
-		return (users.isPresent() ? users.get() : null);
-		// in our web layer we can check IF null returned back
-	}
+	/*
+	 * @Override public User login(String username, String password) {
+	 * System.out.println("In service layer. Logging in user with creds: " +
+	 * username + ", " + password); // java.util Optional<User> users =
+	 * udao.selectAll() // when I call stream() .stream() .filter(u ->
+	 * (u.getEmail().equals(username) && u.getPwd().equals(password))) .findFirst();
+	 * // FindAny() is another option
+	 * 
+	 * return (users.isPresent() ? users.get() : null); // in our web layer we can
+	 * check IF null returned back }
+	 */
 
 	@Override
 	public int register(User user) {
@@ -39,29 +38,29 @@ public class UserServiceImpl implements UserService{
 		return udao.insert(user);
 	}
 
-	@Override
-	public User findUserById(int id) {
-		System.out.println("In service layer. Finding user by id num: " + id);
-		return udao.selectById(id);
-	}
+	/*
+	 * @Override public User findUserById(int id) {
+	 * System.out.println("In service layer. Finding user by id num: " + id); return
+	 * udao.selectById(id); }
+	 */
 
 
 	@Override
-	public List<User> findAllUsers() {
+	public List<User> findAllUsers(User user) {
 		System.out.println("In service layer. Finding all users...");
-		return udao.selectAll();
+		return udao.selectAll(user);
 	}
 
-	@Override
-	public boolean editUser(User user) {
-		System.out.println("In service layer. Edit user: " + user);
-		return udao.update(user);
-	}
+	/*
+	 * @Override public boolean editUser(User user) {
+	 * System.out.println("In service layer. Edit user: " + user); return
+	 * udao.update(user); }
+	 */
 
-	@Override
-	public boolean deleteUser(User user) {
-		System.out.println("In service layer. Removing user: " + user);
-		return udao.delete(user);
-	}
+	/*
+	 * @Override public boolean deleteUser(User user) {
+	 * System.out.println("In service layer. Removing user: " + user); return
+	 * udao.delete(user); }
+	 */
 
 }

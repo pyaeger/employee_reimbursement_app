@@ -9,11 +9,11 @@ public interface UserDAO {
 	//CREATE, READ, UPDATE, AND DELETE
 	public int insert(User user);
 	
-	public User selectById(int id);
+	/* public User selectById(int id); */
 	
-	public List<User> selectAll();
+	public List<User> selectAll(User user);
 	
-	public boolean update(User user);
+	/* public boolean update(User user); */
 	
-	public boolean delete(User user);
+	/* public boolean delete(User user); */
 }
