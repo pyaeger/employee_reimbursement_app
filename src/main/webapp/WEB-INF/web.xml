@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-xmlns="http://java.sun.com/xml/ns/javaee" 
-xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+        version="3.1"> <!-- gave error, now using 3.1 instead of 2.5 -->
   <servlet>
     <servlet-name>FrontController</servlet-name>
     <servlet-class>com.revature.web.FrontController</servlet-class>
@@ -9,10 +11,11 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   
   <servlet-mapping>
     <servlet-name>FrontController</servlet-name>
+	<url-pattern>/test</url-pattern>
     <url-pattern>/login</url-pattern>
     <url-pattern>/register</url-pattern>
     <url-pattern>/users</url-pattern>
-    <url-pattern>/user</url-pattern>
+	<url-pattern>/user</url-pattern>
     <url-pattern>/update</url-pattern>
     <url-pattern>/delete</url-pattern>
     <url-pattern>/error</url-pattern>
@@ -24,3 +27,38 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns
   </error-page>
   
 </web-app>
+
+
+
+
+<!--     <display-name>Hello, Servlets!</display-name>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>error.html</welcome-file>
+    </welcome-file-list>
+
+	This applies to all servlets within the web container (Tomcat)
+    <context-param>
+        <param-name>contextParam</param-name>
+        <param-value>contextValue</param-value>
+    </context-param>
+
+    <servlet>
+        <servlet-name>TestServlet</servlet-name>
+        <servlet-class>com.revature.servlets.TestServlet</servlet-class>
+        ServletConfig is unique to 1 servlet only
+        <init-param>
+            <param-name>someParam</param-name>
+            <param-value>see?</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup> The servlet is already loaded when we start the server
+        default behavior is lazy loading (unless otherwise specified)
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>TestServlet</servlet-name>
+        <url-pattern>/test</url-pattern>
+    </servlet-mapping>
+
+</web-app> -->

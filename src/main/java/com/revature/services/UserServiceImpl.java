@@ -14,53 +14,68 @@ public class UserServiceImpl implements UserService{
 	private UserDAO udao;
 	private static Logger log = Logger.getLogger(UserServiceImpl.class);
 	
-	// Introduce Dependency Injection via Constructor injection
+	//introducing dependency injection through use of a construction injection
+	//so we are not manually injecting what we need for this class; we are handing that control over to the application
 	public UserServiceImpl(UserDAOImpl dao) {
 		super();
-		this.udao = dao;
+		this.udao = dao; //this is the same as this: private static UserDAO udao = new UserDAOImpl();
 	}
 
-	/*
-	 * @Override public User login(String username, String password) {
-	 * System.out.println("In service layer. Logging in user with creds: " +
-	 * username + ", " + password); // java.util Optional<User> users =
-	 * udao.selectAll() // when I call stream() .stream() .filter(u ->
-	 * (u.getEmail().equals(username) && u.getPwd().equals(password))) .findFirst();
-	 * // FindAny() is another option
-	 * 
-	 * return (users.isPresent() ? users.get() : null); // in our web layer we can
-	 * check IF null returned back }
-	 */
+	
+	
+	@Override
+	public User login(String email, String pwd) {
+		log.info("in service layer. Logging in user with creds: " + email + ", " + pwd);
+		//utilize Streams API
+		Optional<User> users = udao.selectAll()
+				.stream()
+				.filter(u -> (u.getEmail().equals(email) && u.getPwd().equals(pwd))) //filter out to all users that match criteria/condition
+				.findFirst(); //returns the element that is left after filtering
+		return (users.isPresent() ? users.get() : null);
+	}
 
+	
+	
 	@Override
 	public int register(User user) {
-		log.info("In service layer. Registering user: " + user);
+		log.info("in service layer. Registering user: " + user);
 		return udao.insert(user);
 	}
 
-	/*
-	 * @Override public User findUserById(int id) {
-	 * System.out.println("In service layer. Finding user by id num: " + id); return
-	 * udao.selectById(id); }
-	 */
+	
+	
+	@Override
+	public User findUserById(int user_id) {
+		log.info("in service layer. searching user by user_id: " + user_id);
+		return udao.selectById(user_id);
+	}
+
+	
+	
+	@Override
+	public User findUserByFirstName(String fname) {
+		log.info("in service layer. searching user by first name: " + fname);
+		return udao.selectByFirstName(fname);
+	}
+	 
 
 
 	@Override
-	public List<User> findAllUsers(User user) {
-		System.out.println("In service layer. Finding all users...");
-		return udao.selectAll(user);
+	public List<User> findAllUsers() {
+		log.info("in service layer. finding all users...");
+		return udao.selectAll();
 	}
 
-	/*
-	 * @Override public boolean editUser(User user) {
-	 * System.out.println("In service layer. Edit user: " + user); return
-	 * udao.update(user); }
-	 */
+	@Override
+	public boolean editUser(User user) {
+		log.info("in service layer. editing user: " + user);
+		return udao.update(user);
+	}
 
-	/*
-	 * @Override public boolean deleteUser(User user) {
-	 * System.out.println("In service layer. Removing user: " + user); return
-	 * udao.delete(user); }
-	 */
+	@Override
+	public boolean deleteUserById(int user_id) {
+		log.info("in service layer. removing user by user_id: " + user_id);
+		return udao.deleteById(user_id);
+	}
 
 }

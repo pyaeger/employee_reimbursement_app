@@ -1,65 +1,65 @@
 package com.revature.models;
 
 public class UserJwtDTO {
-	private int id;
-	private String username;
+	private int user_id;
+	private String email;
 	//Why not password?
 	//// JWTs shouldn't contain sensitive information like passwords
 	//private String password;
-	private String firstName;
-	private String lastName;
+	private String fname;
+	private String lname;
 	//no worries to do much here since Role is just a int and String already
-	private UserRole role;
+	private int user_role_id;
 	public UserJwtDTO() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	public UserJwtDTO(int id, String username, String firstName, String lastName, UserRole role) {
+	public UserJwtDTO(int user_id, String email, String fname, String lname, int user_role_id) {
 		super();
-		this.id = id;
-		this.username = username;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.role = role;
+		this.user_id = user_id;
+		this.email = email;
+		this.fname = fname;
+		this.lname = lname;
+		this.user_role_id = user_role_id;
 	}
 	
 	public UserJwtDTO(int user_id, String email, String fname, String lname, String user_role_id) {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public int getId() {
-		return id;
+	public int getUser_id() {
+		return user_id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
 	}
-	public String getUsername() {
-		return username;
+	public String getEmail() {
+		return email;
 	}
-	public void setUsername(String username) {
-		this.username = username;
+	public void setEmail(String email) {
+		this.email = email;
 	}
-	public String getFirstName() {
-		return firstName;
+	public String getFname() {
+		return fname;
 	}
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+	public void setFname(String fname) {
+		this.fname = fname;
 	}
-	public String getLastName() {
-		return lastName;
+	public String getLname() {
+		return lname;
 	}
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setLname(String lname) {
+		this.lname = lname;
 	}
 	
-	public UserRole getRole() {
-		return role;
+	public int getUser_role_id() {
+		return user_role_id;
 	}
-	public void setRole(UserRole role) {
-		this.role = role;
+	public void setUser_role_id(int user_role_id) {
+		this.user_role_id = user_role_id;
 	}
 	@Override
 	public String toString() {
-		return "UserJwtDTO [id=" + id + ", username=" + username + ", firstName=" + firstName + ", lastName=" + lastName + ", role="+ role + "]";
+		return "UserJwtDTO [user_id=" + user_id + ", email=" + email + ", fname=" + fname + ", lname=" + lname + ", user_role_id="+ user_role_id + "]";
 	}
 }

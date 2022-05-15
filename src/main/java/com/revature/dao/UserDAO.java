@@ -5,15 +5,19 @@ import java.util.List;
 import com.revature.models.User;
 
 public interface UserDAO {
+	
 	//basic CRUD operations
 	//CREATE, READ, UPDATE, AND DELETE
+	
 	public int insert(User user);
 	
-	/* public User selectById(int id); */
+	public User selectById(int user_id);
 	
-	public List<User> selectAll(User user);
+	public User selectByFirstName(String fname);
 	
-	/* public boolean update(User user); */
+	public List<User> selectAll();
 	
-	/* public boolean delete(User user); */
+	public boolean update(User user);
+	
+	public boolean deleteById(int user_id);
 }

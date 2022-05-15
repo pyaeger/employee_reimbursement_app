@@ -14,7 +14,7 @@ public class User {
 	private String lname;
 	private String email;
 	private String pwd;
-	private String user_role_id;
+	private int user_role_id=1;
 	
 	public User() {
 		super();
@@ -36,7 +36,7 @@ public class User {
 		this.pwd = pwd;
 	}
 
-	public User(String fname, String lname, String email, String pwd, String user_role_id) {
+	public User(String fname, String lname, String email, String pwd, int user_role_id) {
 		super();
 		this.fname = fname;
 		this.lname = lname;
@@ -45,7 +45,7 @@ public class User {
 		this.user_role_id = user_role_id;
 	}
 
-	public User(int user_id, String fname, String lname, String email, String pwd, String user_role_id) {
+	public User(int user_id, String fname, String lname, String email, String pwd, int user_role_id) {
 		super();
 		this.user_id = user_id;
 		this.fname = fname;
@@ -95,11 +95,11 @@ public class User {
 		this.pwd = pwd;
 	}
 
-	public String getUser_role_id() {
+	public int getUser_role_id() {
 		return user_role_id;
 	}
 
-	public void setUser_role_id(String user_role_id) {
+	public void setUser_role_id(int user_role_id) {
 		this.user_role_id = user_role_id;
 	}
 	
@@ -111,7 +111,7 @@ public class User {
 		result = prime * result + user_id;
 		result = prime * result + ((lname == null) ? 0 : lname.hashCode());
 		result = prime * result + ((pwd == null) ? 0 : pwd.hashCode());
-		result = prime * result + ((user_role_id == null) ? 0 : user_role_id.hashCode());
+		//result = prime * result + ((user_role_id == null) ? 0 : user_role_id.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		return result;
 	}
@@ -142,11 +142,10 @@ public class User {
 				return false;
 		} else if (!pwd.equals(other.pwd))
 			return false;
-		if (user_role_id == null) {
-			if (other.user_role_id != null)
-				return false;
-		} else if (!user_role_id.equals(other.user_role_id))
-			return false;
+		/*
+		 * if (user_role_id == null) { if (other.user_role_id != null) return false; }
+		 * else if (!user_role_id.equals(other.user_role_id)) return false;
+		 */
 		if (email == null) {
 			if (other.email != null)
 				return false;

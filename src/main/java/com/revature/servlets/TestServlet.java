@@ -8,8 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 public class TestServlet extends HttpServlet{
-	
-	private static final long serialVersionUID = 967277077476365940L;
+	private static final long serialVersionUID = -6094211847942113767L;
 
 	/*
 	 * Servlet lifecycle:

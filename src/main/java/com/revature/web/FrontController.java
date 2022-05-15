@@ -15,89 +15,87 @@ public class FrontController extends HttpServlet{
 	
 	
 	
-	//TODO: need to do getById & getByName methods in doGet
+	//GET methods are used to retrieve resources from an API 
 	@Override
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// save the URI and rewrite it to determine what functionality the user is requesting based on URL
-		final String URI = request.getRequestURI().replace("/FrontController/", "");
-		log.info("User URI is: " + URI);
+	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//save the URI and rewrite it to determine what functionality the user is requesting based on that endpoint
+		final String URI = req.getRequestURI().replace("/ProjOne/", "");
+		log.info("URI: " + URI);
 		
-		switch(URI) {
-
+		switch (URI) {
 		case "users": // query the DB and return a list of all users
 			log.info("getting user list...");
-			RequestHelper.processAllUsers(request, response);
+			RequestHelper.processAllUsers(req, resp);
 			break;
-		/*
-		 * case "user": log.info("search user by name or id. URI: " + URI);
-		 * RequestHelper.processUserBySearchParam(request, response); break;
-		 */
+		case "user":
+			log.info("search user by fname or user_id. URI: " + URI);
+			RequestHelper.processUserBySearchParam(req, resp);
+			break;
 		default:
 			log.info("showing error message...");
-			RequestHelper.processError(request, response);
+			RequestHelper.processError(req, resp);
 			break;
 		}
 	}
 	
-	
-	
+	//POST methods are used for creating resources in your API
+	//instead of passing data within the URL, it safely passes that info only in the body
 	@Override
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// save the URI and rewrite it to determine what functionality the user is requesting based on URL
-		final String URI = request.getRequestURI().replace("/FrontController/", "");
+	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//save the URI and rewrite it to determine what functionality the user is requesting based on that endpoint
+		final String URI = req.getRequestURI().replace("/ProjOne/", "");
+		log.info("URI: " + URI);
 		
-		switch(URI) {
+		switch (URI) {
 		//TODO: use register method here
-		/*
-		 * case "login": log.info("logging in user...");
-		 * RequestHelper.processLogin(request, response); break;
-		 */
+		
+		case "login": log.info("logging in user...");
+		  	RequestHelper.processLogin(req, resp); break;
+		 
 		case "register": 
 			log.info("registering new user...");
-			RequestHelper.processRegistration(request, response);
+			RequestHelper.processRegistration(req, resp);
 			break;
 		default:
 			log.info("showing error message...");
-			RequestHelper.processError(request, response);
+			RequestHelper.processError(req, resp);
 			break;
 		}
 	}
 	
+	@Override
+	protected void doPut(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//save the URI and rewrite it to determine what functionality the user is requesting based on that endpoint
+		final String URI = req.getRequestURI().replace("/ProjOne/", "");
+		log.info("URI: " + URI);
+		
+		switch (URI) {
+		case "update": 
+			log.info("updating user...");
+			RequestHelper.processUserUpdate(req, resp);
+			break;
+		default:
+			log.info("showing error message...");
+			RequestHelper.processError(req, resp);
+			break;
+		}
+	}
 	
-	/*
-	 * //TODO: use doPut/doPatch for update
-	 * 
-	 * @Override protected void doPut(HttpServletRequest request,
-	 * HttpServletResponse response) throws ServletException, IOException { // save
-	 * the URI and rewrite it to determine what functionality the user is requesting
-	 * based on URL final String URI =
-	 * request.getRequestURI().replace("/HelloFrontController/", "");
-	 * 
-	 * switch(URI) { //TODO: use register method here
-	 * 
-	 * case "update": log.info("logging in user...");
-	 * RequestHelper.processUserUpdate(request, response); break;
-	 * 
-	 * default: log.info("showing error message...");
-	 * RequestHelper.processError(request, response); break; } }
-	 */
-	
-	
-	/*
-	 * //TODO: use doDelete for delete
-	 * 
-	 * @Override protected void doDelete(HttpServletRequest request,
-	 * HttpServletResponse response) throws ServletException, IOException { // save
-	 * the URI and rewrite it to determine what functionality the user is requesting
-	 * based on URL final String URI =
-	 * request.getRequestURI().replace("/HelloFrontController/", "");
-	 * 
-	 * switch(URI) { //TODO: use register method here
-	 * 
-	 * case "delete": log.info("logging in user...");
-	 * RequestHelper.processUserDelete(request, response); break;
-	 * 
-	 * default: log.info("showing error message...");
-	 * RequestHelper.processError(request, response); break; } }
-	 */
+	@Override
+	protected void doDelete(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		//save the URI and rewrite it to determine what functionality the user is requesting based on that endpoint
+		final String URI = req.getRequestURI().replace("/ProjOne/", "");
+		log.info("URI: " + URI);
+		
+		switch (URI) {
+		case "delete": 
+			log.info("removing user...");
+			RequestHelper.processUserDelete(req, resp);
+			break;
+		default:
+			log.info("showing error message...");
+			RequestHelper.processError(req, resp);
+			break;
+		}
+	}
 }

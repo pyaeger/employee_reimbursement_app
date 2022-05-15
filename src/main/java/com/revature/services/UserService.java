@@ -6,16 +6,18 @@ import com.revature.models.User;
 
 public interface UserService {
 
-	/* public User login(String username, String password); */
+	public User login(String email, String pwd);
 	
 	public int register(User user);
 	
-	/* public User findUserById(int id); */
+	public User findUserById(int user_id); 
 	
-	public List<User> findAllUsers(User user);
+	public User findUserByFirstName(String fname);	
 	
-	/* public boolean editUser(User user); */
+	public List<User> findAllUsers();
 	
-	/* public boolean deleteUser(User user); */
+	public boolean editUser(User user);
+	
+	public boolean deleteUserById(int user_id);
 
 }
