@@ -18,6 +18,8 @@
 	<url-pattern>/user</url-pattern>
     <url-pattern>/update</url-pattern>
     <url-pattern>/delete</url-pattern>
+    <url-pattern>/request</url-pattern>
+    <url-pattern>/requests</url-pattern>
     <url-pattern>/error</url-pattern>
   </servlet-mapping>
   

@@ -28,9 +28,17 @@ public class FrontController extends HttpServlet{
 			RequestHelper.processAllUsers(req, resp);
 			break;
 		case "user":
-			log.info("search user by fname or user_id. URI: " + URI);
+			log.info("find user by fname or user_id. URI: " + URI);
 			RequestHelper.processUserBySearchParam(req, resp);
 			break;
+		case "request":
+			log.info("find request by requ_id. URI: " + URI);
+			RequestHelper.processRequBySearchParam(req, resp);
+			break;
+		case "requests":
+			log.info("find all requests by author/status or by status only. URI: " + URI);
+			RequestHelper.processAllRequ(req, resp);
+			break;			
 		default:
 			log.info("showing error message...");
 			RequestHelper.processError(req, resp);

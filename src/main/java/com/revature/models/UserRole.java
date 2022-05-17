@@ -11,44 +11,44 @@ package com.revature.models;
 public class UserRole {
 	
 
-	private int roleId;
+	private int user_role_id; //was roleId
 	
 	
-	private String roleName;
+	private String user_role; //was roleName
 
 	public UserRole() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public UserRole(int roleId, String roleName) {
+	public UserRole(int user_role_id, String user_role) {
 		super();
-		this.roleId = roleId;
-		this.roleName = roleName;
+		this.user_role_id = user_role_id;
+		this.user_role = user_role;
 	}
 
-	public int getRoleId() {
-		return roleId;
+	public int getUser_role_id() {
+		return user_role_id;
 	}
 
-	public void setRoleId(int roleId) {
-		this.roleId = roleId;
+	public void setUser_role_id(int user_role_id) {
+		this.user_role_id = user_role_id;
 	}
 
-	public String getRoleName() {
-		return roleName;
+	public String getUser_role() {
+		return user_role;
 	}
 
-	public void setRoleName(String roleName) {
-		this.roleName = roleName;
+	public void setUser_role(String user_role) {
+		this.user_role = user_role;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + roleId;
-		result = prime * result + ((roleName == null) ? 0 : roleName.hashCode());
+		result = prime * result + user_role_id;
+		result = prime * result + ((user_role == null) ? 0 : user_role.hashCode());
 		return result;
 	}
 
@@ -61,18 +61,18 @@ public class UserRole {
 		if (getClass() != obj.getClass())
 			return false;
 		UserRole other = (UserRole) obj;
-		if (roleId != other.roleId)
+		if (user_role_id != other.user_role_id)
 			return false;
-		if (roleName == null) {
-			if (other.roleName != null)
+		if (user_role == null) {
+			if (other.user_role != null)
 				return false;
-		} else if (!roleName.equals(other.roleName))
+		} else if (!user_role.equals(other.user_role))
 			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "UserRole [roleId=" + roleId + ", roleName=" + roleName + "]";
+		return "UserRole [user_role_id=" + user_role_id + ", user_role=" + user_role + "]";
 	}
 }

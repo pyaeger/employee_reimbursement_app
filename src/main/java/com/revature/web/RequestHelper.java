@@ -17,9 +17,13 @@ import javax.servlet.http.HttpSession;
 import org.apache.log4j.Logger;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.revature.dao.RequestsDAOImpl;
 import com.revature.dao.UserDAOImpl;
+import com.revature.models.Request;
 import com.revature.models.User;
 import com.revature.services.JwtService;
+import com.revature.services.RequestsService;
+import com.revature.services.RequestsServiceImpl;
 import com.revature.services.UserService;
 import com.revature.services.UserServiceImpl;
 
@@ -30,6 +34,7 @@ import com.revature.services.UserServiceImpl;
 
 public class RequestHelper {
 	private static UserService userv = new UserServiceImpl(new UserDAOImpl());
+	private static RequestsService rserv = new RequestsServiceImpl(new RequestsDAOImpl());
 	private static JwtService jwtService = new JwtService();
 	private static Logger log = Logger.getLogger(RequestHelper.class);
 	private static ObjectMapper om = new ObjectMapper();
@@ -106,13 +111,57 @@ public class RequestHelper {
 		
 	}
 	 
-	 
+	public static void processRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processRegistration...");
+		BufferedReader reader = req.getReader();
+		StringBuilder s = new StringBuilder();
+
+		// we are just transferring our Reader data to our StringBuilder, line by line
+		String line = reader.readLine();
+		while (line != null) {
+			s.append(line);
+			line = reader.readLine();
+		}
+
+		String body = s.toString(); 
+		String [] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
+		
+		List<String> values = new ArrayList<String>();
+		
+		for (String pair : sepByAmp) { // each element in array looks like this
+			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value -> [bob, pass]
+		}
+		log.info("User attempted to register with information:\n " + body);
+		// capture the actual email and password values
+		String fname = values.get(0);
+		String lname = values.get(1);		
+		String email = values.get(2); // bob
+		String pwd = values.get(3); // pass
+
+		// by default, all users will be automatically registered as member and not manager //
+		
+		User u = new User(fname, lname, email, pwd);
+		int targetId = userv.register(u);
+
+		if (targetId != 0) {
+			PrintWriter pw = resp.getWriter();
+			u.setUser_id(targetId);
+			log.info("New user: " + u);
+			String json = om.writeValueAsString(u);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+			
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("User has successfully been created.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(204); // this means that the connection was successful but no user created!
+		}
+		log.info("leaving request helper now...");
+	}	 
 	
-	/****************************
-	 * 		GET METHODS			
-	 * @throws IOException 
-	 * @throws ServletException *
-	 ****************************/
+
 
 	
 	
@@ -126,6 +175,14 @@ public class RequestHelper {
 		 * it just forwards it to a new resource, and we also maintain the URL
 		*/
 	}
+	
+	
+	
+	/****************************
+	 * 		GET METHODS			
+	 * @throws IOException 
+	 * @throws ServletException *
+	 ****************************/
 	
 	
 	public static void processAllUsers(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -144,6 +201,67 @@ public class RequestHelper {
 		
 		log.info("leaving requesthelper");
 	}	
+	
+	
+	public static void processAllRequ(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("in request helper. getting requests....");
+		BufferedReader reader = req.getReader();
+		StringBuilder s = new StringBuilder();
+
+		// we are just transferring our Reader data to our StringBuilder, line by line
+		String line = reader.readLine();
+		while (line != null) {
+			s.append(line);
+			line = reader.readLine();
+		}
+
+		String body = s.toString(); 
+		String [] sepByAmp = body.split("&");
+		
+		List<String> values = new ArrayList<String>();
+		
+		for (String pair : sepByAmp) { // each element in array looks like this
+			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value -> [bob, pass]
+		}
+		log.info("Request coming in with the following information:\n " + body);
+		
+		// determine what type of search is needed
+		if(body.startsWith("author")) {
+			//1. set the content type to return text to the browser
+			resp.setContentType("application/json");
+			
+			// 2. get a list of all requests in the database based on parameters
+			int author = Integer.parseInt(values.get(0));
+			int status_id = Integer.parseInt(values.get(1));
+			List<Request> allRequests = rserv.findAllRequByAuthorStatus(author, status_id);
+			
+			// 3. turn that list of java objects into a JSON string (using Jackson)
+			String json = om.writeValueAsString(allRequests);
+			
+			// 4. use a PrintWriter to write the objects to the response body which will be seen in the browser
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+			
+			log.info("leaving requesthelper");
+		
+		}else if(body.startsWith("status_id")) {
+			//1. set the content type to return text to the browser
+			resp.setContentType("application/json");
+			
+			// 2. get a list of all requests in the database based on parameters
+			int status_id = Integer.parseInt(values.get(0));
+			List<Request> allRequests = rserv.findAllRequByStatus(status_id);
+			
+			// 3. turn that list of java objects into a JSON string (using Jackson)
+			String json = om.writeValueAsString(allRequests);
+			
+			// 4. use a PrintWriter to write the objects to the response body which will be seen in the browser
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+			
+			log.info("leaving requesthelper");
+		}
+	}		
 	
 	
 
@@ -209,18 +327,8 @@ public class RequestHelper {
 	}	
 	
 	
-
-
-	 
-	
-	
-	
-	
-	
-	
-
-	public static void processRegistration(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-		log.info("inside of request helper...processRegistration...");
+	public static void processRequBySearchParam(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...searching user by param...");
 		BufferedReader reader = req.getReader();
 		StringBuilder s = new StringBuilder();
 
@@ -232,42 +340,48 @@ public class RequestHelper {
 		}
 
 		String body = s.toString(); 
-		String [] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
+		String [] sepByAmp = body.split("&");
 		
 		List<String> values = new ArrayList<String>();
 		
 		for (String pair : sepByAmp) { // each element in array looks like this
 			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value -> [bob, pass]
 		}
-		log.info("User attempted to register with information:\n " + body);
-		// capture the actual email and password values
-		String fname = values.get(0);
-		String lname = values.get(1);		
-		String email = values.get(2); // bob
-		String pwd = values.get(3); // pass
-
-		// by default, all users will be automatically registered as member and not manager //
+		log.info("Request attempted to submit with information:\n " + body);
 		
-		User u = new User(fname, lname, email, pwd);
-		int targetId = userv.register(u);
 
-		if (targetId != 0) {
-			PrintWriter pw = resp.getWriter();
-			u.setUser_id(targetId);
-			log.info("New user: " + u);
-			String json = om.writeValueAsString(u);
-			pw.println(json);
-			System.out.println("JSON:\n" + json);
+			//1. set the content type to return text to the browser
+			resp.setContentType("application/json");
 			
-			resp.setContentType("application/json");
-			resp.setStatus(200); // SUCCESSFUL!
-			log.info("User has successfully been created.");
-		} else {
-			resp.setContentType("application/json");
-			resp.setStatus(204); // this means that the connection was successful but no user created!
-		}
-		log.info("leaving request helper now...");
-	}
+			// 2. Get request in the Database by requ_id
+			int requ_id = Integer.parseInt(values.get(0));
+			Request requ = rserv.findRequById(requ_id);
+			
+			// 3. Turn the list of Java Objects into a JSON string (using Jackson Databind Object Mapper).
+			String json = om.writeValueAsString(requ);
+			
+			// 4. Use a Print Writer to write the objects to the response body seen in the browser
+			PrintWriter out = resp.getWriter();
+			out.println(json);
+			
+	}		
+	
+	
+
+
+	 
+	
+	
+	
+	
+	/****************************
+	 * 		PUT METHODS			
+	 * @throws IOException 
+	 * @throws ServletException *
+	 ****************************/	
+	
+
+
 	
 	
 	
