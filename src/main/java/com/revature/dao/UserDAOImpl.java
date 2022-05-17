@@ -58,9 +58,11 @@ public class UserDAOImpl implements UserDAO{
 			ResultSet rs=stmt2.executeQuery(); //stmt2.executeUpdate(); 
 			while (rs.next())
 			{
-				int targetUserId=rs.getInt(1);
-				user.setUser_id(targetUserId);
+				isInserted = rs.getInt(1);
+				//setUser_id(rs.getInt(1));
+				log.info("Test ID " + rs.getInt(1));
 			}
+			user.setUser_id(isInserted);
 			log.info("New usersid has been successfully retrieved and passed to user.");
 			
 
@@ -68,7 +70,7 @@ public class UserDAOImpl implements UserDAO{
 			conn.close();
 		} catch (SQLException e) {
 			log.warn("Unable to execute SQL statement", e);
-			return isInserted; //user.getUser_id();
+			
 		}
 
 		// 5. return true if successful in db

@@ -83,7 +83,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 		try (Connection conn = JdbcUtil.getConnection()) {
 		log.info("Checking for connection..." + conn);
 			
-			String sql = "SELECT * FROM requests WHERE author = ? and status_id = ? ORDER BY status_id ASC"; 		
+			String sql = "SELECT * FROM requests WHERE author = ? and status_id = ?"; 		
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, author);
 			stmt.setInt(2, status_id);
@@ -91,35 +91,29 @@ public class RequestsDAOImpl implements RequestsDAO {
 
 			 /* ResultSet starts at 1 position behind the starting point of our data...So, in
 			 order to access the first value, we invoke next() to start.... */ 
-			
+
 			while (rs.next()) {
+				Request r = new Request();
 				//1. get information out of the resultSet for each record
-				int requ_id = rs.getInt("request_id");
-				double amount = rs.getDouble("amount");
-				
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				String date = rs.getDate("submitted").toString();
-				LocalDate submitted = LocalDate.parse(date, formatter);
-				
-//				DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");				
-//				String date2 = rs.getDate(4).toString();
-//				LocalDate resolved = LocalDate.parse(date2, formatter2);				
-	
-				String description = rs.getString("description");
-				byte receipt = rs.getByte("receipt");
-				int auth = rs.getInt("author");
-				int resolver = rs.getInt("resolver");
-				int stat_id = rs.getInt("status_id");
-				int type_id = rs.getInt("type_id");
+				r.setRequ_id(rs.getInt(1));
+				r.setAmount(rs.getDouble(2));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date = rs.getDate(3).toString();
+					LocalDate submitted = LocalDate.parse(date, formatter);
+				r.setSubmitted(submitted);
+					if(rs.getDate(4) != null) {
+					DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date2 = rs.getDate(4).toString();
+					LocalDate resolved = LocalDate.parse(date2, formatter2);
+				r.setResolved(resolved);}				
+				r.setDescription(rs.getString(5));
+				r.setReceipt(rs.getByte(6));
+				r.setAuthor(rs.getInt(7));
+				r.setResolver(rs.getInt(8));
+				r.setStatus_id(rs.getInt(9));
+				r.setType_id(rs.getInt(10));
 
-				Request r = new Request(); //Is this really needed???
-				
-				
-				// 2. make an object that matches that record info
-				Request r2 = new Request(requ_id, amount, submitted, description, receipt, auth, resolver, stat_id, type_id);
-
-				//3. add item into our list
-				requList.add(r2);
+				requList.add(r);
 			}
 			
 			/*
@@ -127,7 +121,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 			 * size = rs.getRow(); // get row id }
 			 */
 			
-			log.info("List has been successfully retrieved. Number of requests: ");
+			log.info("List has been successfully retrieved.");
 			//4. close the resultSet
 			rs.close();
 			
@@ -153,7 +147,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 		try (Connection conn = JdbcUtil.getConnection()) {
 		log.info("Checking for connection..." + conn);
 			
-			String sql = "SELECT * FROM requests WHERE status_id = ? ORDER BY status_id ASC"; 		
+			String sql = "SELECT * FROM requests WHERE status_id = ?"; 		
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, status_id);
 			ResultSet rs = stmt.executeQuery();
@@ -162,27 +156,25 @@ public class RequestsDAOImpl implements RequestsDAO {
 			 order to access the first value, we invoke next() to start.... */ 
 			
 			while (rs.next()) {
+				Request r = new Request();
 				//1. get information out of the resultSet for each record
-				int requ_id = rs.getInt(1);
-				double amount = rs.getDouble(2);
-				
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				String date = rs.getDate(3).toString();
-				LocalDate submitted = LocalDate.parse(date, formatter);
-				DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");				
-				String date2 = rs.getDate(4).toString();
-				LocalDate resolved = LocalDate.parse(date2, formatter2);
-				
-	
-				String description = rs.getString(5);
-				byte receipt = rs.getByte(6);
-				int auth = rs.getInt(7);
-				int resolver = rs.getInt(8);
-				int stat_id = rs.getInt(9);
-				int type_id = rs.getInt(10);
-
-				// 2. make an object that matches that record info
-				Request r = new Request(requ_id, amount, submitted, resolved, description, receipt, auth, resolver, stat_id, type_id);
+				r.setRequ_id(rs.getInt(1));
+				r.setAmount(rs.getDouble(2));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date = rs.getDate(3).toString();
+					LocalDate submitted = LocalDate.parse(date, formatter);
+				r.setSubmitted(submitted);
+					if(rs.getDate(4) != null) {
+					DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date2 = rs.getDate(4).toString();
+					LocalDate resolved = LocalDate.parse(date2, formatter2);
+				r.setResolved(resolved);}				
+				r.setDescription(rs.getString(5));
+				r.setReceipt(rs.getByte(6));
+				r.setAuthor(rs.getInt(7));
+				r.setResolver(rs.getInt(8));
+				r.setStatus_id(rs.getInt(9));
+				r.setType_id(rs.getInt(10));
 
 				//3. add item into our list
 				requList.add(r);
@@ -193,7 +185,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 			 * size = rs.getRow(); // get row id }
 			 */
 			
-			log.info("List has been successfully retrieved. Number of requests: ");
+			log.info("List has been successfully retrieved.");
 			//4. close the resultSet
 			rs.close();
 			
@@ -204,7 +196,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 		}
 		log.info("Requests list retrieval complete! Size: ");
 		
-		return requList;	
+		return requList;		
 	}
 
 	
@@ -250,12 +242,6 @@ public class RequestsDAOImpl implements RequestsDAO {
 		
 		return false;
 	}
-
-
-
-
-
-
 
 
 }
