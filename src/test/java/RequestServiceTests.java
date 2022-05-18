@@ -9,23 +9,13 @@ import org.junit.Before;
 
 import org.mockito.Mockito;
 
-import java.io.ByteArrayOutputStream;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 
-import javax.imageio.ImageIO;
+import java.io.IOException;
 
 import com.revature.dao.RequestsDAOImpl;
-import com.revature.dao.UserDAOImpl;
 import com.revature.models.Request;
-import com.revature.models.User;
 import com.revature.services.RequestsService;
 import com.revature.services.RequestsServiceImpl;
-import com.revature.services.UserService;
-import com.revature.services.UserServiceImpl;
 
 public class RequestServiceTests extends TestCase {
 
@@ -101,33 +91,38 @@ public class RequestServiceTests extends TestCase {
     @Test
 	public void test_getRequestByResolver(){
 
-		when(mockdao.findAllRequ()).thenReturn(dummyDb);
 
-        List<Request> reqList = new ArrayList<>();
+        Request r1 = new Request(1, 48.23, "train ticket to client", 4, 0, 2, 4);
+        Request r2 = new Request(2, 89.03, "dinner with client", 3, 0, 1, 4);
+        // Request r3 = new Request(3, 102.45, "hotel stay for conference", hotel, 4, 1, 2, 3);
 
-        for(Request entry: dummyDb){
-            if (entry.getResolver() == 5){
-                reqList.add(entry);
-            }
-        }
+        List<Request> testDb = new ArrayList<>();
+        testDb.add(r1);
+        testDb.add(r2);
+        int r1Resolver = 0;
+        // dummyDb.add(r3);
 
-		assertEquals(reqList, rserv.findAllRequByResolver(2));
+        when(mockdao.findAllRequByResolver(5)).thenReturn(testDb);
 
+        assertEquals(r1Resolver, r1.getResolver());
+
+
+        
 	}
 
-    @Test
-	public void test_getRequestByAuthor() throws NullPointerException{
+    // @Test
+	// public void test_getRequestByAuthor() throws NullPointerException{
 
-		when(mockdao.findAllRequ()).thenReturn(dummyDb);
+	// 	when(mockdao.findAllRequ()).thenReturn(dummyDb);
 
-        List<Request> reqList = new ArrayList<>();
-        reqList.add(dummyDb.get(1));
+    //     List<Request> reqList = new ArrayList<>();
+    //     reqList.add(dummyDb.get(1));
 
         
 
-		assertNull(reqList);
+	// 	assertNull(reqList);
 
-	}
+	// }
     @Test
 	public void test_deleteUserByIDsuccessReturnNull(){
 
