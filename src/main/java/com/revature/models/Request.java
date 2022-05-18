@@ -1,6 +1,7 @@
 package com.revature.models;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class Request {
 	
@@ -9,7 +10,7 @@ public class Request {
 	private LocalDate submitted;
 	private LocalDate resolved;
 	private String description;
-	private byte receipt;
+	private byte[] receipt;
 	private int author;
 	private int resolver;
 	private int status_id=1;
@@ -24,7 +25,7 @@ public class Request {
 
 
 	public Request(int requ_id, double amount, LocalDate submitted, LocalDate resolved, String description,
-			byte receipt, int author, int resolver, int status_id, int type_id) {
+			byte[] receipt, int author, int resolver, int status_id, int type_id) {
 		super();
 		this.requ_id = requ_id;
 		this.amount = amount;
@@ -61,6 +62,10 @@ public class Request {
 	public Request(int requ_id, double amount, LocalDate submitted, String description, byte receipt, int author,
 			int resolver, int status_id, int type_id) {
 		// TODO Auto-generated constructor stub
+	}
+
+
+	public Request(int requ_id, double amount, String description, int author, int resolver, int status_id, int type_id) {
 	}
 
 
@@ -114,12 +119,12 @@ public class Request {
 	}
 
 
-	public byte getReceipt() {
+	public byte[] getReceipt() {
 		return receipt;
 	}
 
 
-	public void setReceipt(byte receipt) {
+	public void setReceipt(byte[] receipt) {
 		this.receipt = receipt;
 	}
 

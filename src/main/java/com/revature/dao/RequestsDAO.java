@@ -13,11 +13,11 @@ public interface RequestsDAO {
 	
 	public List<Request> findAllRequByStatus(int status_id);
 	
-	public Request findAllRequByType(int type_id);
+	public List<Request> findAllRequByType(int type_id);
 	
-	public Request findAllRequByAuthor(int author);	
+	public List<Request> findAllRequByAuthor(int author);	
 	
-	public Request findAllRequByResolver(int resolver);
+	public List <Request> findAllRequByResolver(int resolver);
 	
 	public List<Request> findAllRequ();
 	

@@ -107,7 +107,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 					LocalDate resolved = LocalDate.parse(date2, formatter2);
 				r.setResolved(resolved);}				
 				r.setDescription(rs.getString(5));
-				r.setReceipt(rs.getByte(6));
+				r.setReceipt(rs.getBytes(6));
 				r.setAuthor(rs.getInt(7));
 				r.setResolver(rs.getInt(8));
 				r.setStatus_id(rs.getInt(9));
@@ -170,7 +170,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 					LocalDate resolved = LocalDate.parse(date2, formatter2);
 				r.setResolved(resolved);}				
 				r.setDescription(rs.getString(5));
-				r.setReceipt(rs.getByte(6));
+				r.setReceipt(rs.getBytes(6));
 				r.setAuthor(rs.getInt(7));
 				r.setResolver(rs.getInt(8));
 				r.setStatus_id(rs.getInt(9));
@@ -202,33 +202,318 @@ public class RequestsDAOImpl implements RequestsDAO {
 	
 	
 	@Override
-	public Request findAllRequByType(int type_id) {
+	public List<Request> findAllRequByType(int type_id) {
 		
-		return null;
+		log.info("In DAO layer: getting requests based on request_type from DB...");
+		System.out.println("In DAO layer getting specified requests...");
+		List<Request> requList = new ArrayList<>();
+
+		try (Connection conn = JdbcUtil.getConnection()) {
+		log.info("Checking for connection..." + conn);
+			
+			String sql = "SELECT * FROM requests WHERE type_id = ?"; 		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, type_id);
+			ResultSet rs = stmt.executeQuery();
+
+			 /* ResultSet starts at 1 position behind the starting point of our data...So, in
+			 order to access the first value, we invoke next() to start.... */ 
+			
+			while (rs.next()) {
+				Request r = new Request();
+				//1. get information out of the resultSet for each record
+				r.setRequ_id(rs.getInt(1));
+				r.setAmount(rs.getDouble(2));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date = rs.getDate(3).toString();
+					LocalDate submitted = LocalDate.parse(date, formatter);
+				r.setSubmitted(submitted);
+					if(rs.getDate(4) != null) {
+					DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date2 = rs.getDate(4).toString();
+					LocalDate resolved = LocalDate.parse(date2, formatter2);
+				r.setResolved(resolved);}				
+				r.setDescription(rs.getString(5));
+				r.setReceipt(rs.getBytes(6));
+				r.setAuthor(rs.getInt(7));
+				r.setResolver(rs.getInt(8));
+				r.setStatus_id(rs.getInt(9));
+				r.setType_id(rs.getInt(10));
+
+				//3. add item into our list
+				requList.add(r);
+			}
+			
+			/*
+			 * int size = 0; if (rs != null) { rs.last(); // moves cursor to the last row
+			 * size = rs.getRow(); // get row id }
+			 */
+			
+			log.info("List has been successfully retrieved.");
+			//4. close the resultSet
+			rs.close();
+			
+			//5. close connection
+			conn.close();
+		} catch (SQLException e) {
+			log.warn("Unable to retrieve requests from the database", e);
+		}
+		log.info("Requests list retrieval complete! Size: ");
+		
+		return requList;		
 	}
 
 	@Override
-	public Request findAllRequByAuthor(int author) {
+	public List<Request> findAllRequByAuthor(int author) {
+	
+		log.info("In DAO layer: getting requests based on author from DB...");
+		System.out.println("In DAO layer getting specified requests...");
+		List<Request> requList = new ArrayList<>();
+
+		try (Connection conn = JdbcUtil.getConnection()) {
+		log.info("Checking for connection..." + conn);
+			
+			String sql = "SELECT * FROM requests WHERE author = ?"; 		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, author);
+			ResultSet rs = stmt.executeQuery();
+
+			 /* ResultSet starts at 1 position behind the starting point of our data...So, in
+			 order to access the first value, we invoke next() to start.... */ 
+			
+			while (rs.next()) {
+				Request r = new Request();
+				//1. get information out of the resultSet for each record
+				r.setRequ_id(rs.getInt(1));
+				r.setAmount(rs.getDouble(2));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date = rs.getDate(3).toString();
+					LocalDate submitted = LocalDate.parse(date, formatter);
+				r.setSubmitted(submitted);
+					if(rs.getDate(4) != null) {
+					DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date2 = rs.getDate(4).toString();
+					LocalDate resolved = LocalDate.parse(date2, formatter2);
+				r.setResolved(resolved);}				
+				r.setDescription(rs.getString(5));
+				r.setReceipt(rs.getBytes(6));
+				r.setAuthor(rs.getInt(7));
+				r.setResolver(rs.getInt(8));
+				r.setStatus_id(rs.getInt(9));
+				r.setType_id(rs.getInt(10));
+
+				//3. add item into our list
+				requList.add(r);
+			}
+			
+			/*
+			 * int size = 0; if (rs != null) { rs.last(); // moves cursor to the last row
+			 * size = rs.getRow(); // get row id }
+			 */
+			
+			log.info("List has been successfully retrieved.");
+			//4. close the resultSet
+			rs.close();
+			
+			//5. close connection
+			conn.close();
+		} catch (SQLException e) {
+			log.warn("Unable to retrieve requests from the database", e);
+		}
+		log.info("Requests list retrieval complete! Size: ");
 		
-		return null;
+		return requList;		
 	}
 
 	@Override
-	public Request findAllRequByResolver(int resolver) {
+	public List<Request> findAllRequByResolver(int resolver) {
 		
-		return null;
+		
+		log.info("In DAO layer: getting requests based on request_type from DB...");
+		System.out.println("In DAO layer getting specified requests...");
+		List<Request> requList = new ArrayList<>();
+
+		try (Connection conn = JdbcUtil.getConnection()) {
+		log.info("Checking for connection..." + conn);
+			
+			String sql = "SELECT * FROM requests WHERE resolver = ?"; 		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, resolver);
+			ResultSet rs = stmt.executeQuery();
+
+			 /* ResultSet starts at 1 position behind the starting point of our data...So, in
+			 order to access the first value, we invoke next() to start.... */ 
+			
+			while (rs.next()) {
+				Request r = new Request();
+				//1. get information out of the resultSet for each record
+				r.setRequ_id(rs.getInt(1));
+				r.setAmount(rs.getDouble(2));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date = rs.getDate(3).toString();
+					LocalDate submitted = LocalDate.parse(date, formatter);
+				r.setSubmitted(submitted);
+					if(rs.getDate(4) != null) {
+					DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date2 = rs.getDate(4).toString();
+					LocalDate resolved = LocalDate.parse(date2, formatter2);
+				r.setResolved(resolved);}				
+				r.setDescription(rs.getString(5));
+				r.setReceipt(rs.getBytes(6));
+				r.setAuthor(rs.getInt(7));
+				r.setResolver(rs.getInt(8));
+				r.setStatus_id(rs.getInt(9));
+				r.setType_id(rs.getInt(10));
+
+				//3. add item into our list
+				requList.add(r);
+			}
+			
+			/*
+			 * int size = 0; if (rs != null) { rs.last(); // moves cursor to the last row
+			 * size = rs.getRow(); // get row id }
+			 */
+			
+			log.info("List has been successfully retrieved.");
+			//4. close the resultSet
+			rs.close();
+			
+			//5. close connection
+			conn.close();
+		} catch (SQLException e) {
+			log.warn("Unable to retrieve requests from the database", e);
+		}
+		log.info("Requests list retrieval complete! Size: ");
+		
+		return requList;		
 	}
 
 	@Override
 	public List<Request> findAllRequ() {
 		
-		return null;
+		
+		log.info("In DAO layer: getting requests based on request_type from DB...");
+		System.out.println("In DAO layer getting specified requests...");
+		List<Request> requList = new ArrayList<>();
+
+		try (Connection conn = JdbcUtil.getConnection()) {
+		log.info("Checking for connection..." + conn);
+			
+			String sql = "SELECT * FROM requests"; 		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			ResultSet rs = stmt.executeQuery();
+
+			 /* ResultSet starts at 1 position behind the starting point of our data...So, in
+			 order to access the first value, we invoke next() to start.... */ 
+			
+			while (rs.next()) {
+				Request r = new Request();
+				//1. get information out of the resultSet for each record
+				r.setRequ_id(rs.getInt(1));
+				r.setAmount(rs.getDouble(2));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date = rs.getDate(3).toString();
+					LocalDate submitted = LocalDate.parse(date, formatter);
+				r.setSubmitted(submitted);
+					if(rs.getDate(4) != null) {
+					DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date2 = rs.getDate(4).toString();
+					LocalDate resolved = LocalDate.parse(date2, formatter2);
+				r.setResolved(resolved);}				
+				r.setDescription(rs.getString(5));
+				r.setReceipt(rs.getBytes(6));
+				r.setAuthor(rs.getInt(7));
+				r.setResolver(rs.getInt(8));
+				r.setStatus_id(rs.getInt(9));
+				r.setType_id(rs.getInt(10));
+
+				//3. add item into our list
+				requList.add(r);
+			}
+			
+			/*
+			 * int size = 0; if (rs != null) { rs.last(); // moves cursor to the last row
+			 * size = rs.getRow(); // get row id }
+			 */
+			
+			log.info("List has been successfully retrieved.");
+			//4. close the resultSet
+			rs.close();
+			
+			//5. close connection
+			conn.close();
+		} catch (SQLException e) {
+			log.warn("Unable to retrieve requests from the database", e);
+		}
+		log.info("Requests list retrieval complete! Size: ");
+		
+		return requList;		
 	}
 	
 	@Override
 	public int submit(Request requ) {
+	
+		log.info("In DAO layer: inserting request...");
+		System.out.println("In DAO layer adding new request...");
 		
-		return 1;
+
+		try (Connection conn = JdbcUtil.getConnection()) {
+		log.info("Checking for connection..." + conn);
+			
+			String sql = "INSERT INTO requests (amount, submitted, resolved, description, receipt, author, resolver, status_id, type_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"; 		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			
+			ResultSet rs = stmt.executeQuery();
+
+			 /* ResultSet starts at 1 position behind the starting point of our data...So, in
+			 order to access the first value, we invoke next() to start.... */ 
+			
+			while (rs.next()) {
+				Request r = new Request();
+				//1. get information out of the resultSet for each record
+				r.setRequ_id(rs.getInt(1));
+				r.setAmount(rs.getDouble(2));
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date = rs.getDate(3).toString();
+					LocalDate submitted = LocalDate.parse(date, formatter);
+				r.setSubmitted(submitted);
+					if(rs.getDate(4) != null) {
+					DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+					String date2 = rs.getDate(4).toString();
+					LocalDate resolved = LocalDate.parse(date2, formatter2);
+				r.setResolved(resolved);}				
+				r.setDescription(rs.getString(5));
+				r.setReceipt(rs.getBytes(6));
+				r.setAuthor(rs.getInt(7));
+				r.setResolver(rs.getInt(8));
+				r.setStatus_id(rs.getInt(9));
+				r.setType_id(rs.getInt(10));
+
+				//3. add item into our list
+
+				
+				
+			}
+			
+			/*
+			 * int size = 0; if (rs != null) { rs.last(); // moves cursor to the last row
+			 * size = rs.getRow(); // get row id }
+			 */
+			
+			log.info("Request has been successfully added to db");
+			//4. close the resultSet
+			rs.close();
+			
+			//5. close connection
+			conn.close();
+		} catch (SQLException e) {
+			log.warn("Unable to add request to db", e);
+			return 0;
+		}
+		log.info("Requests created successfully: " );
+		
+		return 1;		
 	}
 
 	@Override
@@ -237,11 +522,32 @@ public class RequestsDAOImpl implements RequestsDAO {
 		return false;
 	}
 
+	
+
 	@Override
 	public boolean deleteRequById(int requ_id) {
+		log.info("Deleting user. User info: " + requ_id);
 		
-		return false;
-	}
+		try (Connection conn = JdbcUtil.getConnection()) {
+			// now removing user from table
+			String sql = "delete from request where requ_id = ?;";
+			
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, requ_id);
+			
+			stmt.executeUpdate();
+
+			log.info("request removal for request " + requ_id + " was successful. ");
+
+		} catch (SQLException e) {
+			log.warn("Unable to execute SQL statement", e);
+			return false;
+		}
+		
+		log.info("deletion complete");
+		
+		return true;
+	}	
 
 
 }
