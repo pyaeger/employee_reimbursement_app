@@ -80,7 +80,7 @@ public class RequestHelper {
 		String email = values.get(0); // bob
 		String pwd = values.get(1); // pass
 		
-		System.out.println("User attempted to login with email " + email);
+		System.out.println("User attempting to login with email " + email + " and password " + pwd);
 		
 		// call the confirmLogin() method and fetch the actual User object from the DB
 		User u = userv.login(email, pwd);
@@ -100,13 +100,19 @@ public class RequestHelper {
 			resp.setContentType("application/json");
 			
 			// convert the object with the object mapper
+			out.println(om.writeValueAsString("User with email " + email + " has successfully logged in!"));
+			out.println(om.writeValueAsString("Welcome to the EMPLOYEE REIMBURSEMENT SYSTEM: "));
 			out.println(om.writeValueAsString(u));
+
 			
-			// log it!
-			System.out.println("The user with email " + email + " has logged in.");
+			// log it!	
+			System.out.println("The user with email " + email + " has logged in.");		
+			
 		} else {
 			// if the returned object is null, return No Content status (successfull request, but no user found in DB).
+			log.info("inside of request helper...log in attempt returned empty object...");
 			resp.setStatus(204); 
+
 		}
 		
 	}
@@ -162,6 +168,66 @@ public class RequestHelper {
 	}	 
 	
 
+	
+	public static void processNewRequest(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processNewRequest...");
+		BufferedReader reader = req.getReader();
+		StringBuilder s = new StringBuilder();
+
+		// we are just transferring our Reader data to our StringBuilder, line by line
+		String line = reader.readLine();
+		while (line != null) {
+			s.append(line);
+			line = reader.readLine();
+		}
+
+		String body = s.toString(); 
+		String [] sepByAmp = body.split("&"); // separate username=bob&password=pass -> [username=bob, password=pass]
+		
+		List<String> values = new ArrayList<String>();
+		
+		for (String pair : sepByAmp) { // each element in array looks like this
+			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value -> [bob, pass]
+		}
+		
+		log.info("New reimbursement request being submitted:\n " + body);
+		// capture the actual request details..
+		
+		double amount = Double.parseDouble(values.get(0));
+		String description = values.get(1);
+		int author = Integer.parseInt(values.get(2));
+		int status_id = Integer.parseInt(values.get(3));
+		int type_id = Integer.parseInt(values.get(4));
+
+		// by default, all users will be automatically registered as member and not manager //
+		
+		Request r = new Request();
+		r.setAmount(amount);
+		r.setDescription(description);
+		r.setAuthor(author); 		
+		r.setStatus_id(status_id); 
+		r.setType_id(type_id); 
+		
+		//Request r = new Request(amount, description, author, status_id, type_id);
+		int targetId = rserv.submit(r);
+
+		if (targetId != 0) {
+			PrintWriter pw = resp.getWriter();
+			r.setRequ_id(targetId);
+			log.info("New request: " + r);
+			String json = om.writeValueAsString(r);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+			
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("Request has successfully been created.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(204); // this means that the connection was successful but no request created!
+		}
+		log.info("leaving request helper now...");
+	}	 
 
 	
 	
@@ -440,6 +506,62 @@ public class RequestHelper {
 		log.info("leaving request helper now...");
 	}	
 	
+	
+	
+	public static void processRequUpdate(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		log.info("inside of request helper...processing reimbursement requests via processRequUpdate...");
+		BufferedReader reader = req.getReader();
+		StringBuilder s = new StringBuilder();
+
+		// we are just transferring our Reader data to our StringBuilder, line by line
+		String line = reader.readLine();
+		while (line != null) {
+			s.append(line);
+			line = reader.readLine();
+		}
+
+		String body = s.toString(); 
+		String [] sepByAmp = body.split("&"); // separate email=bob&password=pass -> [email=bob, password=pass]
+		
+		List<String> values = new ArrayList<String>();
+		
+		for (String pair : sepByAmp) { // each element in array looks like this
+			values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String element in the array to just value -> [bob, pass]
+		}
+		log.info("Manager attempted to process request with information:\n " + body);
+		// capture the actual email and password values
+		int requ_id = Integer.parseInt(values.get(0)); //id numbers cannot be modifed! 
+		int status_id = Integer.parseInt(values.get(1)); // bob 
+		String resolver = values.get(2); // pass 
+
+				
+		Request requ = new Request();
+		requ.setRequ_id(requ_id);
+		requ.setStatus_id(status_id);
+		requ.setResolver(resolver); 		
+		boolean isUpdated = rserv.editRequ(requ);
+
+		if (isUpdated) {
+			PrintWriter pw = resp.getWriter();
+			log.info("Request processing successful! Request info: " + requ);
+			String json = om.writeValueAsString(requ);
+			pw.println(json);
+			System.out.println("JSON:\n" + json);
+			
+			resp.setContentType("application/json");
+			resp.setStatus(200); // SUCCESSFUL!
+			log.info("Request has successfully been edited.");
+		} else {
+			resp.setContentType("application/json");
+			resp.setStatus(400); // this means that the connection was successful but no user was updated!
+		}
+		log.info("leaving request helper now...");
+	}		
+	
+	
+	
+	
+	
 
 	public static void processUserDelete(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		log.info("inside of request helper...processUserDelete...");
@@ -470,13 +592,13 @@ public class RequestHelper {
 		if (isDeleted) {
 			PrintWriter pw = resp.getWriter();
 			log.info("Delete successful! Removed user by user_id: " + user_id);
-			String json = om.writeValueAsString("User ID#" + user_id + " has been successfully removed!");
+			String json = om.writeValueAsString("User with ID#: " + user_id + " has been successfully removed!");
 			pw.println(json);
 			System.out.println("JSON:\n" + json);
 			
 			resp.setContentType("application/json");
 			resp.setStatus(200); // SUCCESSFUL!
-			log.info("User has successfully been edited.");
+			log.info("User has been deleted.");
 		} else {
 			resp.setContentType("application/json");
 			resp.setStatus(400); // this means that the connection was successful but no user was deleted!
@@ -484,191 +606,5 @@ public class RequestHelper {
 		log.info("leaving request helper now...");
 		
 	}
-
-	
-	
-	/*
-	 * public static void processAllUsers(HttpServletRequest request,
-	 * HttpServletResponse response) throws IOException { // 1. set the content type
-	 * to return text to the browser response.setContentType("application/json");
-	 * 
-	 * // 2. Get a list of all employees in the Database User u = new User();
-	 * List<User> allUsers = userv.findAllUsers(u);
-	 * 
-	 * // 3. Turn the list of Java Objects into a JSON string (using Jackson
-	 * Databind Object Mapper). String json = om.writeValueAsString(allUsers);
-	 * 
-	 * // 4. Use a Print Writer to write the objects to the response body seen in
-	 * the browser PrintWriter out = response.getWriter(); out.println(json); }
-	 */	
-	
-	
-	/*
-	 * public static void processUserBySearchParam(HttpServletRequest request,
-	 * HttpServletResponse response) throws IOException {
-	 * log.info("inside of request helper...searching user by param...");
-	 * BufferedReader reader = request.getReader(); StringBuilder s = new
-	 * StringBuilder();
-	 * 
-	 * // we are just transferring our Reader data to our StringBuilder, line by
-	 * line String line = reader.readLine(); while (line != null) { s.append(line);
-	 * line = reader.readLine(); }
-	 * 
-	 * String body = s.toString(); String [] sepByAmp = body.split("&");
-	 * 
-	 * List<String> values = new ArrayList<String>();
-	 * 
-	 * for (String pair : sepByAmp) { // each element in array looks like this
-	 * values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String
-	 * element in the array to just value -> [bob, pass] }
-	 * log.info("User attempted to register with information:\n " + body);
-	 * 
-	 * // determine what type of search is needed
-	 * 
-	 * //1. set the content type to return text to the browser
-	 * response.setContentType("application/json");
-	 * 
-	 * // 2. Get user in the Database by id int user_id =
-	 * Integer.parseInt(values.get(0)); User user = userv.findUserById(user_id);
-	 * 
-	 * // 3. Turn the list of Java Objects into a JSON string (using Jackson
-	 * Databind Object Mapper). String json = om.writeValueAsString(user);
-	 * 
-	 * // 4. Use a Print Writer to write the objects to the response body seen in
-	 * the browser PrintWriter out = response.getWriter(); out.println(json);
-	 * 
-	 * 
-	 * }
-	 */	
-
-	
-	/*
-	 * public static void processUserUpdate(HttpServletRequest request,
-	 * HttpServletResponse response) throws IOException {
-	 * log.info("inside of request helper...processUserUpdate..."); BufferedReader
-	 * reader = request.getReader(); StringBuilder s = new StringBuilder();
-	 * 
-	 * // we are just transferring our Reader data to our StringBuilder, line by
-	 * line String line = reader.readLine(); while (line != null) { s.append(line);
-	 * line = reader.readLine(); }
-	 * 
-	 * String body = s.toString(); String [] sepByAmp = body.split("&"); // separate
-	 * username=bob&password=pass -> [username=bob, password=pass]
-	 * 
-	 * List<String> values = new ArrayList<String>();
-	 * 
-	 * for (String pair : sepByAmp) { // each element in array looks like this
-	 * values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String
-	 * element in the array to just value -> [bob, pass] }
-	 * log.info("User attempted to register with information:\n " + body); //
-	 * capture the actual username and password values int user_id =
-	 * Integer.parseInt(values.get(0)); //id numbers cannot be modifed! String email
-	 * = values.get(1); // bob String pwd = values.get(2); // pass String fname =
-	 * values.get(3); String lname = values.get(4); int user_role_id =
-	 * Integer.parseInt(values.get(5)); String roleName = values.get(6); UserRole
-	 * role = new UserRole(roleId, roleName);
-	 * 
-	 * User tempUser = new User(); tempUser.setUser_id(user_id);
-	 * tempUser.setEmail(email); tempUser.setPwd(pwd); tempUser.setFname(fname);
-	 * tempUser.setLname(lname); tempUser.setUser_role_id(user_role_id); boolean
-	 * isUpdated = userv.editUser(tempUser);
-	 * 
-	 * if (isUpdated) { PrintWriter pw = response.getWriter();
-	 * log.info("Edit successful! New user info: " + tempUser); String json =
-	 * om.writeValueAsString(tempUser); pw.println(json);
-	 * System.out.println("JSON:\n" + json);
-	 * 
-	 * response.setContentType("application/json"); response.setStatus(200); //
-	 * SUCCESSFUL! log.info("User has successfully been edited."); } else {
-	 * response.setContentType("application/json"); response.setStatus(400); // this
-	 * means that the connection was successful but no user was updated! }
-	 * log.info("leaving request helper now..."); }
-	 */
-	 
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/*
-	 * public static UserJwtDTO authenicateUser(HttpServletRequest request) { //some
-	 * functionalities should only allow managers (like view all users or deleting
-	 * users)! //for that reason, you need to check the user's jwt token first
-	 * log.info("Request data:"); Enumeration<String> headerNames =
-	 * request.getHeaderNames(); Map<String, String> map = new HashMap<String,
-	 * String>();
-	 * 
-	 * while (headerNames.hasMoreElements()) { String key = (String)
-	 * headerNames.nextElement(); String value = request.getHeader(key);
-	 * map.put(key, value); } log.info(map);
-	 * 
-	 * String headerValue = request.getHeader("authorization"); String jwt =
-	 * headerValue.split(" ")[1]; //Bearer token
-	 * 
-	 * UserJwtDTO dto = new UserJwtDTO();
-	 * 
-	 * try { dto = jwtService.parseJwt(jwt); } catch (JsonProcessingException e) {
-	 * e.printStackTrace(); } catch (IOException e) { e.printStackTrace(); } return
-	 * dto; }
-	 */
-	
-	
-	
-
-	/*
-	 * public static void processUserDelete(HttpServletRequest request,
-	 * HttpServletResponse response) throws IOException { //this functionality
-	 * should only allow managers to delete users! UserJwtDTO dto =
-	 * authenicateUser(request);
-	 * 
-	 * if(dto != null && dto.getRole().getRoleName().equals("manager")) { //then
-	 * allow our normal deletion action here
-	 * log.info("inside of request helper...processUserDelete..."); BufferedReader
-	 * reader = request.getReader(); StringBuilder s = new StringBuilder();
-	 * 
-	 * // we are just transferring our Reader data to our StringBuilder, line by
-	 * line String line = reader.readLine(); while (line != null) { s.append(line);
-	 * line = reader.readLine(); }
-	 * 
-	 * String body = s.toString(); String [] sepByAmp = body.split("&"); // separate
-	 * username=bob&password=pass -> [username=bob, password=pass]
-	 * 
-	 * List<String> values = new ArrayList<String>();
-	 * 
-	 * for (String pair : sepByAmp) { // each element in array looks like this
-	 * values.add(pair.substring(pair.indexOf("=") + 1)); // trim each String
-	 * element in the array to just value -> [bob, pass] }
-	 * log.info("Manager attempted to delete user with information:\n " + body); //
-	 * capture the actual username and password values int id =
-	 * Integer.parseInt(values.get(0)); //id numbers cannot be modifed! String
-	 * username = values.get(1); // bob String password = values.get(2); // pass
-	 * String firstname = values.get(3); String lastname = values.get(4); int roleId
-	 * = Integer.parseInt(values.get(5)); String roleName = values.get(6); UserRole
-	 * role = new UserRole(roleId, roleName);
-	 * 
-	 * User tempUser = new User(); tempUser.setId(id);
-	 * tempUser.setUsername(username); tempUser.setPassword(password);
-	 * tempUser.setFirstName(firstname); tempUser.setLastName(lastname);
-	 * tempUser.setRole(role); boolean isDeleted = userv.deleteUser(tempUser);
-	 * 
-	 * if (isDeleted) { PrintWriter pw = response.getWriter();
-	 * log.info("Edit successful! New user info: " + tempUser); String json =
-	 * om.writeValueAsString(tempUser); pw.println(json);
-	 * System.out.println("JSON:\n" + json);
-	 * 
-	 * response.setContentType("application/json"); response.setStatus(200); //
-	 * SUCCESSFUL! log.info("User has successfully been edited."); } else {
-	 * response.setContentType("application/json"); response.setStatus(400); // this
-	 * means that the connection was successful but no user was updated! } }else {
-	 * log.info("User is unauthorized to perform this operation.");
-	 * response.setContentType("application/json"); response.setStatus(401);
-	 * //unauthorized }
-	 * 
-	 * log.info("leaving request helper now..."); }
-	 */
 
 }

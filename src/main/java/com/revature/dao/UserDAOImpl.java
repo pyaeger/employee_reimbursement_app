@@ -185,23 +185,23 @@ public class UserDAOImpl implements UserDAO{
 				userList.add(u);
 			}
 			
-			int size = 0;
-			if (rs != null) 
-			{
-			  rs.last();    // moves cursor to the last row
-			  size = rs.getRow(); // get row id 
-			}
-			
-			log.info("List has been successfully retrieved. Number of users: " + size);
-			//4. close the resultSet
-			rs.close();
+//			int size = 0;
+//			if (rs != null) 
+//			{
+//			  rs.last();    // moves cursor to the last row
+//			  size = rs.getRow(); // get row id 
+//			}
+//			
+//			log.info("List has been successfully retrieved. Number of users: " + size);
+//			//4. close the resultSet
+//			rs.close();
 			
 			//5. close connection
 			conn.close();
 		} catch (SQLException e) {
 			log.warn("Unable to retrieve users from the database", e);
 		}
-		log.info("User list retrieval complete! Size: " + userList.size());
+		log.info("User list retrieval complete!");
 		return userList;
 	}
 

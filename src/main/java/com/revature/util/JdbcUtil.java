@@ -27,11 +27,15 @@ public class JdbcUtil {
 //					System.getenv("db_username"), 
 //					System.getenv("db_password")
 //				);
-
-			// This is not secure!
+			
 			String url = "jdbc:postgresql://localhost:5432/postgres";
 			String username = "postgres";
 			String password = "asdqwe123";
+
+			// This is not secure!!!!!!!!!!!!!!!!!!!!!
+//			String url = "jdbc:postgresql://emphandlerdb.chw7d4mmldfw.us-east-1.rds.amazonaws.com:5432/emphandlerdb";
+//			String username = "manager";
+//			String password = "management";
 
 			logger.debug(String.format(
 					"Making a database connection with following localhost credentials: \nURL: %s \nUsername: %s \nPassword: %s",

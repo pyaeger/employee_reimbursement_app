@@ -21,7 +21,7 @@ public interface RequestsDAO {
 	
 	public List<Request> findAllRequ();
 	
-	public int submit(Request requ);
+	public int submit(Request r);
 	
 	public boolean editRequ(Request requ);
 	

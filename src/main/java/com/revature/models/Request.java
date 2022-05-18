@@ -11,7 +11,7 @@ public class Request {
 	private String description;
 	private byte receipt;
 	private int author;
-	private int resolver;
+	private String resolver;
 	private int status_id=1;
 	private int type_id;
 	
@@ -24,7 +24,7 @@ public class Request {
 
 
 	public Request(int requ_id, double amount, LocalDate submitted, LocalDate resolved, String description,
-			byte receipt, int author, int resolver, int status_id, int type_id) {
+			byte receipt, int author, String resolver, int status_id, int type_id) {
 		super();
 		this.requ_id = requ_id;
 		this.amount = amount;
@@ -52,14 +52,29 @@ public class Request {
 	}
 
 
-	public Request(int requ_id, double amount, String description, byte receipt, int author, int resolver,
+	public Request(int requ_id, double amount, String description, byte receipt, int author, String resolver,
 			int status_id, int type_id) {
 		// TODO Auto-generated constructor stub
 	}
 
 
 	public Request(int requ_id, double amount, LocalDate submitted, String description, byte receipt, int author,
-			int resolver, int status_id, int type_id) {
+			String resolver, int status_id, int type_id) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public Request(double amount2, String description2, byte receipt2, int author2, int status_id2, String type_id2) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public Request(double amount2, String description2, int author2, int status_id2, String type_id2) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public Request(double amount2, String description2, int author2, int status_id2, int type_id2) {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -134,12 +149,12 @@ public class Request {
 	}
 
 
-	public int getResolver() {
+	public String getResolver() {
 		return resolver;
 	}
 
 
-	public void setResolver(int resolver) {
+	public void setResolver(String resolver) {
 		this.resolver = resolver;
 	}
 

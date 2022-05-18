@@ -25,12 +25,13 @@ public class UserServiceImpl implements UserService{
 	
 	@Override
 	public User login(String email, String pwd) {
-		log.info("in service layer. Logging in user with creds: " + email + ", " + pwd);
+		log.info("in service layer. Logging in user with credentials: " + email + ", " + pwd);
 		//utilize Streams API
 		Optional<User> users = udao.selectAll()
 				.stream()
 				.filter(u -> (u.getEmail().equals(email) && u.getPwd().equals(pwd))) //filter out to all users that match criteria/condition
 				.findFirst(); //returns the element that is left after filtering
+		log.info("Continuing log in process in User Service Impl layer: " + users);
 		return (users.isPresent() ? users.get() : null);
 	}
 

@@ -24,11 +24,13 @@ public interface RequestsService {
 		
 		public List<Request> findAllRequ();
 		
-		public int submit(Request requ);
+		public int submit(Request r);
 		
 		public boolean editRequ(Request requ);
 		
 		public boolean deleteRequById(int requ_id);
+
+
 
 
 	}

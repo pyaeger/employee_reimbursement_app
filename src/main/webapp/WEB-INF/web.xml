@@ -20,6 +20,8 @@
     <url-pattern>/delete</url-pattern>
     <url-pattern>/request</url-pattern>
     <url-pattern>/requests</url-pattern>
+    <url-pattern>/process</url-pattern>
+    <url-pattern>/submit</url-pattern>
     <url-pattern>/error</url-pattern>
   </servlet-mapping>
   

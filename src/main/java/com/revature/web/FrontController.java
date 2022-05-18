@@ -64,6 +64,10 @@ public class FrontController extends HttpServlet{
 			log.info("registering new user...");
 			RequestHelper.processRegistration(req, resp);
 			break;
+		case "submit": 
+			log.info("submitting new reimbursement request...");
+			RequestHelper.processNewRequest(req, resp);
+			break;			
 		default:
 			log.info("showing error message...");
 			RequestHelper.processError(req, resp);
@@ -82,6 +86,10 @@ public class FrontController extends HttpServlet{
 			log.info("updating user...");
 			RequestHelper.processUserUpdate(req, resp);
 			break;
+		case "process": 
+			log.info("manager processing reimbursement request as approved or denied...");
+			RequestHelper.processRequUpdate(req, resp);
+			break;			
 		default:
 			log.info("showing error message...");
 			RequestHelper.processError(req, resp);

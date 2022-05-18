@@ -67,15 +67,15 @@ public class RequestsServiceImpl implements RequestsService {
 	}
 	
 	@Override
-	public int submit(Request requ) {
-		
-		return rdao.submit(requ);
+	public int submit(Request r) {
+		log.info("in service impl layer. Submitting request: " + r);
+		return rdao.submit(r);
 	}
 
 	@Override
 	public boolean editRequ(Request requ) {
-		
-		return false;
+		log.info("in service layer. editing request: " + requ);
+		return rdao.editRequ(requ);
 	}
 
 	@Override
@@ -83,5 +83,7 @@ public class RequestsServiceImpl implements RequestsService {
 		
 		return false;
 	}
+
+
 
 }

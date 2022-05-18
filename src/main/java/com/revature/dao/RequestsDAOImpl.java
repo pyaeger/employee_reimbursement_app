@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -48,10 +49,12 @@ public class RequestsDAOImpl implements RequestsDAO {
 		if (rs.next()) {
 			requ.setRequ_id(rs.getInt(1));
 			requ.setAmount(rs.getDouble(2));
-				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				String date = rs.getDate(3).toString();
-				LocalDate submitted = LocalDate.parse(date, formatter);
-			requ.setSubmitted(submitted);
+//				DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+//				String date = rs.getDate(3).toString();
+//				LocalDate submitted = LocalDate.parse(date, formatter);
+			Timestamp subm = rs.getTimestamp(3);
+			LocalDate ldat = subm.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+			requ.setSubmitted(ldat);
 			requ.setDescription(rs.getString(4));
 			requ.setAuthor(rs.getInt(5));
 			requ.setStatus_id(rs.getInt(6));
@@ -109,7 +112,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 				r.setDescription(rs.getString(5));
 				r.setReceipt(rs.getByte(6));
 				r.setAuthor(rs.getInt(7));
-				r.setResolver(rs.getInt(8));
+				r.setResolver(rs.getString(8));
 				r.setStatus_id(rs.getInt(9));
 				r.setType_id(rs.getInt(10));
 
@@ -172,7 +175,7 @@ public class RequestsDAOImpl implements RequestsDAO {
 				r.setDescription(rs.getString(5));
 				r.setReceipt(rs.getByte(6));
 				r.setAuthor(rs.getInt(7));
-				r.setResolver(rs.getInt(8));
+				r.setResolver(rs.getString(8));
 				r.setStatus_id(rs.getInt(9));
 				r.setType_id(rs.getInt(10));
 
@@ -198,7 +201,112 @@ public class RequestsDAOImpl implements RequestsDAO {
 		
 		return requList;		
 	}
+	
+	
+	
 
+
+	@Override
+	public int submit(Request r) {
+		log.info("adding request to database. Request info: " + r);
+		int isInserted = 0;
+		// 1. create a connection using my ConnectionUtil class - try-with-resources
+		try (Connection conn = JdbcUtil.getConnection()) {
+			
+			// 2. prepare my SQL statement using JDBC's PreparedStatement
+			String sql = "insert into requests (amount, description, author, status_id, type_id) values (?, ?, ?, ?, ?)";
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setDouble(1, r.getAmount());
+			stmt.setString(2, r.getDescription());
+			stmt.setInt(3, r.getAuthor());
+			stmt.setInt(4, r.getStatus_id());
+			stmt.setInt(5, r.getType_id());
+			
+			
+//			double amount = Double.parseDouble(values.get(0));
+//			String description = values.get(1);
+//			byte receipt = Byte.parseByte(values.get(2));
+//			int author = Integer.parseInt(values.get(3));
+//			int status_id = Integer.parseInt(values.get(4));
+//			String type_id = values.get(5);
+
+			// 3. executing that query
+			isInserted = stmt.executeUpdate();
+			log.info("New request has been successfully created.");	
+			
+			String sql2 = "select requ_id from requests where amount=? and description=?";
+			PreparedStatement stmt2 = conn.prepareStatement(sql2); 
+			stmt2.setDouble(1, r.getAmount()); 
+			stmt2.setString(2, r.getDescription());
+			
+			ResultSet rs=stmt2.executeQuery(); //stmt2.executeUpdate(); 
+			while (rs.next())
+			{
+				isInserted = rs.getInt(1);
+				//setUser_id(rs.getInt(1));
+				log.info("Test ID " + rs.getInt(1));
+			}
+			r.setRequ_id(isInserted);
+			log.info("New requ_id has been successfully retrieved and passed to r.");
+			
+
+			// 4. close db connection to avoid memory leaks
+			conn.close();
+		} catch (SQLException e) {
+			log.warn("Unable to execute SQL statement", e);
+			
+		}
+
+		// 5. return true if successful in db
+		log.info("insert successful!");
+		return isInserted; //user.getUser_id();
+		
+		
+	}	
+	
+	
+	@Override
+	public boolean editRequ(Request requ) {
+		log.info("Editing request. Edits: " + requ);
+		
+		
+		try (Connection conn = JdbcUtil.getConnection()) {
+			String sql = "SELECT status_id,resolver FROM requests WHERE requ_id = ?;"; 
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, requ.getRequ_id());
+			ResultSet rs = stmt.executeQuery();
+			
+//			if (rs.next()) {
+//				requ.setStatus_id(rs.getInt(1));
+//				requ.setResolver(rs.getString(2));
+//			}
+		
+			// now making edits to Request
+			String sql2 = "update requests where requ_id =? set "
+					+ "status_id=?, "
+					+ "resolver=?";
+			PreparedStatement stmt2 = conn.prepareStatement(sql2);
+			stmt2.setInt(1, requ.getRequ_id());
+			stmt2.setInt(2, requ.getStatus_id());
+			stmt2.setString(3, requ.getResolver());
+			stmt2.executeUpdate();
+
+			log.info("Request update for ID " + requ.getRequ_id() + " was successful! ");
+
+		} catch (SQLException e) {
+			log.warn("Unable to execute SQL statement", e);
+			return false;
+		}
+		
+		log.info("Update complete.");
+		
+		return true;
+	}
+	
+	
+	
+	
+	
 	
 	
 	@Override
@@ -225,17 +333,10 @@ public class RequestsDAOImpl implements RequestsDAO {
 		return null;
 	}
 	
-	@Override
-	public int submit(Request requ) {
-		
-		return 1;
-	}
 
-	@Override
-	public boolean editRequ(Request requ) {
-		
-		return false;
-	}
+	
+
+
 
 	@Override
 	public boolean deleteRequById(int requ_id) {
