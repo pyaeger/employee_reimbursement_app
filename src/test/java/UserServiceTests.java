@@ -43,17 +43,25 @@ public class UserServiceTests extends TestCase {
 	
 	}
 
-	// @Test
-	// public void testLogin_Success() throws NullPointerException{
+	@Test
+	public void testLogin_Success() throws NullPointerException{
 		
-	// 	when(mockdao.selectAll()).thenReturn(dummyDb);
-	// 	User result = userv.login("jsmith@gmail.com", "jayjay");
+		User testUser = new User(3, "Gerard", "Departew", "gtgotit89@gmail.com", "gerger", 14);
+		User testUser2 = new User(4, "Garth", "Deeper", "gogogadget88@gmail.com", "gasbag", 11);
+		List<User> testDb = new ArrayList<>();
+		testDb.add(testUser);
+		testDb.add(testUser2);
 
-	// 	assertSame(result, userv.login("jdoe77@gmail.com", "jayday"));
+		when(mockdao.selectAll()).thenReturn(testDb);
 
 
+		assertNotNull(userv.login("gtgotit89@gmail.com", "gerger"));
 
-	// }
+
+		
+
+
+	}
 
 
 	@Test
@@ -86,7 +94,7 @@ public class UserServiceTests extends TestCase {
 
 
 	@Test 
-	public void test_locateUserByUsername_email(){
+	public void test_locateUserByFirstName(){
 		
 
 		User testUser = new User(3, "Gerard", "Departew", "gtgotit89@gmail.com", "gerger", 14);
@@ -102,16 +110,22 @@ public class UserServiceTests extends TestCase {
 	}
 
 
-	// @Test
-	// public void test_getUserByFirstName_nullreturn(){
-	// 	when(mockdao.selectAll()).thenReturn(dummyDb);
+	@Test
+	public void test_getUserByFirstName_notSamereturn(){
+		
+		User testUser = new User(3, "Gerard", "Departew", "gtgotit89@gmail.com", "gerger", 14);
+		User testUser2 = new User(4, "Garth", "Deeper", "gogogadget88@gmail.com", "gasbag", 11);
+		List<User> testDb = new ArrayList<>();
+		testDb.add(testUser);
+		testDb.add(testUser2);
 
-	// 	User exampleUser = userv.findUserByFirstName("John");
+		when(mockdao.selectByFirstName("Kabba")).thenReturn(null);
 
-	// 	String firstName = dummyDb.get(0).getFname();
+		assertNotSame("Kabba", testUser.getFname());
+		assertNotSame("Kabba", testUser2.getFname());
 
-	// 	assertEquals(firstName, exampleUser.getFname());
-	// }
+
+	}
 
 
 
