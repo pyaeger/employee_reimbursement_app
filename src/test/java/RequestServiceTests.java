@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
-
+import org.mockito.Mock;
 import org.mockito.Mockito;
 
 
@@ -22,12 +22,14 @@ public class RequestServiceTests extends TestCase {
     private RequestsDAOImpl mockdao;
     private RequestsService rserv;
 
+    @Mock
     List<Request> dummyDb;
 
     
 
     @Before
     public void setUp() throws IOException {
+
 
         mockdao = Mockito.mock(RequestsDAOImpl.class);
 
@@ -110,19 +112,27 @@ public class RequestServiceTests extends TestCase {
         
 	}
 
-    // @Test
-	// public void test_getRequestByAuthor() throws NullPointerException{
+    @Test
+	public void test_getRequestByAuthor() throws NullPointerException{
 
-	// 	when(mockdao.findAllRequ()).thenReturn(dummyDb);
-
-    //     List<Request> reqList = new ArrayList<>();
-    //     reqList.add(dummyDb.get(1));
+        Request r1 = new Request(1, 48.23, "train ticket to client", 0, 5, 2, 4);
+        Request r2 = new Request(2, 89.03, "dinner with client", 0, 3, 1, 4);
+        // Request r3 = new Request(3, 102.45, "hotel stay for conference", hotel, 4, 1, 2, 3);
 
         
+        List<Request> testDb = new ArrayList<>();
+        testDb.add(r1);
+        testDb.add(r2);
+        int r1Author = 0;
+        // dummyDb.add(r3);
 
-	// 	assertNull(reqList);
+        when(mockdao.findAllRequByAuthor(0)).thenReturn(testDb);
 
-	// }
+        int r1GottenAuthor = testDb.get(0).getAuthor();
+
+        assertEquals(r1Author, r1GottenAuthor);
+
+	}
     @Test
 	public void test_deleteUserByIDsuccessReturnNull(){
 
