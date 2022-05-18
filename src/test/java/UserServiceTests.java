@@ -32,13 +32,13 @@ public class UserServiceTests extends TestCase {
 		
 		User u1 = new User(1, "John", "Smith", "jsmith01@gmail.com", "jayjay", 7);
 		User u2 = new User(2, "Jane", "Doe", "jdoe77@gmail.com", "jayday", 33);
-		User u3 = new User(3, "Gerard", "Departew", "gtgotit89@gmail.com", "gerger", 14);
+		// User u3 = new User(3, "Gerard", "Departew", "gtgotit89@gmail.com", "gerger", 14);
 		User u4 = new User(4, "Jane", "Dreezy", "jdreezy77@gmail.com", "jordan", 47);
 		
 		List<User> dummyDb = new ArrayList<User>();
 		dummyDb.add(u1);
 		dummyDb.add(u2);
-		dummyDb.add(u3);
+		// dummyDb.add(u3);
 		dummyDb.add(u4);
 	
 	}
@@ -76,17 +76,41 @@ public class UserServiceTests extends TestCase {
 		
 		when(mockdao.selectAll()).thenReturn(dummyDb);
 
-		assertEquals(dummyDb, userv.findAllUsers());
+		List<User> userList = userv.findAllUsers();
+
+		assertEquals(dummyDb, userList);
 
 	}
 
 
 
 
-	// @Test 
-	// public void test_locateUserByUsername_email(){
+	@Test 
+	public void test_locateUserByUsername_email(){
+		
+
+		User testUser = new User(3, "Gerard", "Departew", "gtgotit89@gmail.com", "gerger", 14);
+		User testUser2 = new User(4, "Garth", "Deeper", "gogogadget88@gmail.com", "gasbag", 11);
+		List<User> testDb = new ArrayList<>();
+		testDb.add(testUser);
+		testDb.add(testUser2);
+
+		when(mockdao.selectByFirstName("Gerard")).thenReturn(testUser);
+
+		assertEquals("Gerard", testUser.getFname());
+
+	}
+
+
+	// @Test
+	// public void test_getUserByFirstName_nullreturn(){
 	// 	when(mockdao.selectAll()).thenReturn(dummyDb);
-	// 	assertNull(dummyDb.get(2).getEmail(), "gtgotit89@gmail.com");
+
+	// 	User exampleUser = userv.findUserByFirstName("John");
+
+	// 	String firstName = dummyDb.get(0).getFname();
+
+	// 	assertEquals(firstName, exampleUser.getFname());
 	// }
 
 

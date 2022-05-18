@@ -59,3 +59,51 @@
 2022-05-18 01:55:43 INFO [com.revature.services.RequestsServiceImpl]: in service layer. finding all requests...
 2022-05-18 01:57:25 INFO [com.revature.services.RequestsServiceImpl]: in service layer. finding all requests...
 2022-05-18 01:57:25 INFO [com.revature.services.RequestsServiceImpl]: in service layer. searching request by requ_id: 2
+2022-05-18 07:32:22 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:32:22 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:32:22 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:32:22 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:35:13 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:35:13 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by first name: John
+2022-05-18 07:35:13 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:35:13 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:35:13 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:35:13 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:35:56 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:35:56 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by first name: John
+2022-05-18 07:35:56 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:35:56 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:35:56 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:35:56 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:38:21 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:38:21 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by first name: John
+2022-05-18 07:38:21 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:38:21 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:38:21 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:38:21 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:39:10 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:39:10 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:39:10 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:39:10 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by first name: John
+2022-05-18 07:39:10 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:39:10 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:40:02 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:40:02 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:40:02 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:40:02 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:40:02 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:43:19 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:43:19 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:43:19 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:43:19 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:43:19 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:46:10 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:46:10 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:46:10 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:46:10 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:46:10 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
+2022-05-18 07:54:07 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=test, lname=test, email=test, pwd=test, user_role_id=47]
+2022-05-18 07:54:07 INFO [com.revature.services.UserServiceImpl]: in service layer. finding all users...
+2022-05-18 07:54:07 INFO [com.revature.services.UserServiceImpl]: in service layer. Registering user: User [user_id=5, fname=, lname=, email=, pwd=, user_role_id=0]
+2022-05-18 07:54:07 INFO [com.revature.services.UserServiceImpl]: in service layer. removing user by user_id: 2
+2022-05-18 07:54:07 INFO [com.revature.services.UserServiceImpl]: in service layer. searching user by user_id: 2
