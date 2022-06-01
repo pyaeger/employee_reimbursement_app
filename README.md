@@ -36,3 +36,6 @@ git clone https://github.com/pyaeger/employee_reimbursement_app
 
 ## Contributors
 - Joachim Ogodi: JUnit, Mockito testing
+
+## License
+-Attribution 4.0 International (CC BY 4.0) https://creativecommons.org/licenses/by/4.0/
