@@ -30,6 +30,9 @@ The Expense Reimbursement System (ERS) will manage the process of reimbursing em
 - [ ] A Manager can approve/deny pending reimbursement requests
 - [ ] A Manager can view images of the receipts from reimbursement requests
 
+## Getting Started
+
+git clone https://github.com/pyaeger/employee_reimbursement_app
 
 ## Contributors
 - Joachim Ogodi: JUnit, Mockito testing
